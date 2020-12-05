@@ -14,7 +14,9 @@ Not gonna lie, for the second star I originally just printed out the
 sorted id numbers on the terminal to get a better sense of what they
 looked like, and then did a set difference between the id numbers and
 set(range(78,892)). I polished up the code afterwards to be more general
-purpose.
+purpose (my first approach involved using sets, but I also came up
+with a version that avoids having to use sets, which would be more
+efficient for large inputs)
 """
 
 import util
@@ -64,13 +66,31 @@ def task2(boarding_passes):
     min_id = min(ids)
     max_id = max(ids)
 
-    all_ids = set(range(min_id, max_id))
+    all_ids = set(range(min_id, max_id + 1))
 
     missing = all_ids - set(ids)
 
     assert len(missing) == 1
 
     return missing.pop()
+
+
+def task2_alt(boarding_passes):
+    """
+    Alternative implementation that avoids using sets:
+    Add up all the ids between the minimum and maximum id
+    (this can be done with a simple formula), add up all
+    the ids from the input, and get the difference.
+    """
+    ids = get_ids(boarding_passes)
+
+    min_id = min(ids)
+    max_id = max(ids)
+
+    sum_all_ids = ((max_id - min_id + 1)/2) * (min_id + max_id)
+    sum_ids = sum(ids)
+
+    return int(sum_all_ids) - sum_ids    
 
 
 if __name__ == "__main__":
@@ -94,5 +114,6 @@ if __name__ == "__main__":
 
     print("\nTASK 2")
     util.call_and_print(task2, boarding_passes)
+    util.call_and_print(task2_alt, boarding_passes)
 
 
