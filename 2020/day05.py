@@ -115,5 +115,3 @@ if __name__ == "__main__":
     print("\nTASK 2")
     util.call_and_print(task2, boarding_passes)
     util.call_and_print(task2_alt, boarding_passes)
-
-

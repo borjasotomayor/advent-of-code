@@ -35,7 +35,6 @@ def read_rules(lines):
         m = re.match("(.*) bags contain (.*)\.", line)
         container_bag, contained_bags = m.groups()
 
-        
         if contained_bags == "no other bags":
             bags = []
         else:
@@ -48,7 +47,6 @@ def read_rules(lines):
         rules[container_bag] = bags
 
     return rules
-
 
 
 def is_reachable(rules, start_color, target_color, visited=None):
