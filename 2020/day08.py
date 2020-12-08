@@ -28,20 +28,25 @@ def task1(console):
 
 
 def task2(console):
+    # We iterate through the instructions and, if we
+    # encounter a nop or jmp, we switch the instruction
+    # and try running the program
     for i, (op, param) in enumerate(console.prog):
-        # Reset console back to original state and program
-        console.reset()
+        if op in ("nop", "jmp"):
+            # Reset console back to original state and program
+            # (undoing any previous changes to program)
+            console.reset()
 
-        # Replace instruction
-        if op == "nop":
-            console.prog[i] = ("jmp", param)
-        elif op == "jmp":
-            console.prog[i] = ("nop", param)
+            # Replace instruction
+            if op == "nop":
+                console.prog[i] = ("jmp", param)
+            elif op == "jmp":
+                console.prog[i] = ("nop", param)
 
-        # Run console and check for normal termination
-        console.run()
-        if console.normal_termination():
-            return console.acc                
+            # Run console and check for normal termination
+            console.run()
+            if console.normal_termination():
+                return console.acc                
     
 
 if __name__ == "__main__":
