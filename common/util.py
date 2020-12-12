@@ -2,6 +2,9 @@
 Utility functions and classes for Advent of Code
 """
 
+import shapely.geometry
+import shapely.affinity
+import math
 import copy
 
 #
@@ -146,3 +149,105 @@ class Grid:
         grid = [[char] * max_x for _ in range(max_y)]
 
         return cls(grid)        
+
+
+class Direction:
+    def __init__(self, x, y):
+        self._p = shapely.geometry.Point(x, y)
+
+    @classmethod
+    def bearing(cls, degrees):
+        north = cls(0,1)
+        return shapely.affinity.rotate(north, -degrees)
+
+    @classmethod
+    def UP(cls):
+        return cls(0,1)
+
+    @classmethod
+    def DOWN(cls):
+        return cls(0,-1)
+
+    @classmethod
+    def RIGHT(cls):
+        return cls(1,0)
+
+    @classmethod
+    def LEFT(cls):
+        return cls(-1,0)
+
+    NORTH = UP
+    SOUTH = DOWN
+    EAST = RIGHT
+    WEST = LEFT
+
+    def rotate_counterclockwise(self, degrees):
+        # Rotate anti-clockwise by degrees
+        self._p = shapely.affinity.rotate(self._p, degrees, origin=(0,0))
+
+    def rotate_clockwise(self, degrees):
+        # Rotate clockwise by degrees
+        self._p = shapely.affinity.rotate(self._p, -degrees, origin=(0,0))
+
+    def move_grid_coordinates(self, x_or_coords, y=None):
+        assert (isinstance(x_or_coords, int) and isinstance(y, int)) or \
+            (isinstance(x_or_coords, tuple) and len(x_or_coords) == 2 and
+             isinstance(x_or_coords[0], int) and isinstance(x_or_coords[1], int) and
+             y is None)
+
+        if isinstance(x_or_coords, int):
+            x = x_or_coords
+            y = y
+        elif isinstance(x_or_coords, tuple):
+            x, y = x_or_coords
+
+        assert self._p.x in (-1,0,1) and self._p.y in (-1,0,1)
+        x2 = x + int(self._p.x)
+        y2 = y + int(self._p.y)
+        return (x2, y2)
+
+    def __repr__(self):
+        return "<{}, {}>".format(self._p.x, self._p.y)       
+
+
+def rotate_counterclockwise(point, degrees, origin=(0,0)):
+    """
+    Rotate a point counterclockwise around an origin.
+    """
+
+    rp = shapely.affinity.rotate(shapely.geometry.Point(*point), degrees, origin)
+
+    # A lot of AoC problems use 0, 90, 180, 270, etc. degrees and integer coordinates.
+    # In these cases, we want to return integers.
+    if isinstance(point[0], int) and isinstance(point[1], int) and degrees % 90 == 0:
+        return (round(rp.x), round(rp.y))
+
+    return (rp.x, rp.y)
+
+
+def rotate_clockwise(point, degrees, origin=(0,0)):
+    """
+    Rotate a point counterclockwise around an origin.
+    """
+    return rotate_counterclockwise(point, -degrees, origin)
+
+
+def angle_points(origin, p1, p2):
+    """
+    Return the angle between two points, relative to an origin
+    """
+    dx1 = p1.x - origin.x
+    dy1 = p1.y - origin.y
+
+    dx2 = p2.x - origin.x
+    dy2 = p2.y - origin.y
+
+    a1 = math.atan2(dy1, dx1)
+    a2 = math.atan2(dy2, dx2)
+
+    d = math.degrees(a2 - a1)
+
+    if d < 0:
+        return 360 + d
+    else:
+        return d
