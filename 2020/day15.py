@@ -11,6 +11,14 @@ two turns) for every number in the first part, which meant the second part
 ran in a decent amount of time despite the larger inputs. It still takes 
 several seconds to run, though, so I'm still wondering whether there's 
 a more efficient solution.
+
+UPDATE: There is, indeed a more efficient solution, since you don't
+have to keep track of the "turn difference" for _all_ numbers,
+just the previous one (and you can re-compute that as you go
+along, only needing a dictionary storing the last turn for
+each number). I'm still keeping my original solution since that's
+the one I wrote, but kudos to @ajwells256 for pointing out the
+more efficient one.
 """
 
 import util
