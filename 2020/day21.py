@@ -24,8 +24,6 @@ def read_foods(foods_txt):
     """
     Read the provided input into a list of (ingredients, allergens) tuples
     """
-    # Create a dictionary mapping allergens to lists
-    # of ingredients that may contain that allergen
     foods = []
     for line in foods_txt:
         ingredients_txt, allergens_txt = line.split(" (contains ")
