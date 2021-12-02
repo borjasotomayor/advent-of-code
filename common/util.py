@@ -6,6 +6,7 @@ import shapely.geometry
 import shapely.affinity
 import math
 import copy
+import parse
 
 #
 # DEBUGGING/LOGGING
@@ -67,6 +68,17 @@ def read_ints(filename, sep=None):
     """
     strs = read_strs(filename, sep)
     return [int(x) for x in strs]
+
+
+def iter_parse(strings, fmt):
+    """
+    Generator function that iterates over a sequence of strings,
+    and returns the values parsed according to a format string
+    """
+    p = parse.compile(fmt)
+
+    for s in strings:
+        yield p.parse(s)
 
 
 #
