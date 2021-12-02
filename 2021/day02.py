@@ -28,10 +28,7 @@ def submarine(commands, use_aim=False):
     horizontal = 0
     depth = 0
     aim = 0
-    for cmd in commands:
-        direction, X = cmd.split()
-        X = int(X)
-
+    for direction, X in util.iter_parse(commands, "{} {:d}"):
         if direction == "forward":
             horizontal += X
             if use_aim:
