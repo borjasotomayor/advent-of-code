@@ -8,6 +8,8 @@ https://adventofcode.com/2021/day/2
 A fun little command-parsing problem. My original solution had
 two separate functions for each task for the sake of expediency,
 but I cleaned them up and refactored them into a single function.
+
+EDIT: Updated the solution to use the parse library, suggested by @alexoro412
 """
 
 import util
