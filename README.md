@@ -1,6 +1,6 @@
 # Advent of Code
 
-This repository contains my solutions to [Advent of Code](https://adventofcode.com/) problems. I currently have all my 2020 solutions, and I'm slowly cleaning up with 2019 solutions. I'm also doing Advent of Code 2021, and adding solutions as I finish them.
+This repository contains my solutions to [Advent of Code](https://adventofcode.com/) problems. I currently have all my 2020 solutions, and I'm slowly cleaning up my 2019 solutions. I'm also doing Advent of Code 2021, and adding solutions as I finish them.
 
 Inside each year's directory, each day has a `dayXX.py` file that will run the code necessary to solve both stars for that day. Each file includes a header with a few comments on the problem.
 
