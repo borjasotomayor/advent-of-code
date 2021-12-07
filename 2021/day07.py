@@ -21,7 +21,7 @@ from util import log
 def task1(crabs):
     min_fuel = None
 
-    for i, _ in enumerate(crabs):
+    for i in range(min(crabs), max(crabs)+1):
         fuel = sum(abs(crab-i) for crab in crabs)
         min_fuel = fuel if min_fuel is None else min(fuel, min_fuel)
 
@@ -38,7 +38,7 @@ def sum_n(n):
 def task2(crabs):
     min_fuel = None
 
-    for i, _ in enumerate(crabs):
+    for i in range(min(crabs), max(crabs)+1):
         fuel = sum(sum_n(abs(crab-i)) for crab in crabs)
         min_fuel = fuel if min_fuel is None else min(fuel, min_fuel)
 
@@ -48,10 +48,10 @@ def task2(crabs):
 # One-line solutions, just for the heck of it
 
 def task1_alt(crabs):
-    return min(sum(abs(crab-i) for crab in crabs) for i, _ in enumerate(crabs))
+    return min(sum(abs(crab-i) for crab in crabs) for i in range(min(crabs), max(crabs)+1))
 
 def task2_alt(crabs):
-    return min(sum(abs(crab-i)*(abs(crab-i)+1)//2 for crab in crabs) for i, _ in enumerate(crabs))
+    return min(sum(abs(crab-i)*(abs(crab-i)+1)//2 for crab in crabs) for i in range(min(crabs), max(crabs)+1))
 
 
 if __name__ == "__main__":
