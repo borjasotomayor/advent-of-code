@@ -5,8 +5,9 @@ https://adventofcode.com/2020/day/7
 1st star: 00:03:27
 2nd star: 00:05:39
 
-Welp, this problem was way easier than I expected. Apparently there is a more 
-clever O(n) solution, but my O(n^2) solution seems to work just fine.
+Welp, this problem was way easier than I expected for a day 7 problem.
+Apparently there is a more clever O(n) solution, but my O(n^2) solution 
+seems to work just fine.
 """
 
 import util
@@ -42,6 +43,15 @@ def task2(crabs):
         min_fuel = fuel if min_fuel is None else min(fuel, min_fuel)
 
     return min_fuel
+
+
+# One-line solutions, just for the heck of it
+
+def task1_alt(crabs):
+    return min(sum(abs(crab-i) for crab in crabs) for i, _ in enumerate(crabs))
+
+def task2_alt(crabs):
+    return min(sum(abs(crab-i)*(abs(crab-i)+1)//2 for crab in crabs) for i, _ in enumerate(crabs))
 
 
 if __name__ == "__main__":
