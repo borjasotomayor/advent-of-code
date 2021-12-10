@@ -146,12 +146,15 @@ class Grid:
 
 
     @classmethod
-    def from_file(cls, filename):
+    def from_file(cls, filename, cast=None):
         lines = read_strs(filename, sep="\n")
 
         # We convert each line to a list, in case we
         # need to modify the contents of the grid
         grid = [list(line) for line in lines]
+
+        if cast is not None:
+            grid = [[cast(v) for v in row] for row in grid]
 
         return cls(grid)
 
