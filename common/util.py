@@ -90,6 +90,11 @@ class Grid:
     Used to manipulate grids with one character per position,
     using (x,y) coordinates (where the top-left position is 0,0)
     """
+    
+    # Useful for problems that require checking adjacent positions
+    DIRECTIONS = [(-1, -1), (0, -1), (+1,-1),
+                  (-1,  0),          (+1, 0),
+                  (-1, +1), (0, +1), (+1,+1)]
 
     def __init__(self, grid, infinite_x=False, infinite_y=False):
         self.infinite_x = infinite_x
@@ -98,19 +103,19 @@ class Grid:
 
 
     def __str__(self):
-        rows = ["".join(row) for row in self._grid]
+        rows = ["".join(str(x) for x in row) for row in self._grid]
         return "\n".join(rows)
 
+    def copy(self):
+        return Grid(self._grid, self.infinite_x, self.infinite_y)
 
     @property
     def max_x(self):
         return len(self._grid[0])
 
-
     @property
     def max_y(self):
         return len(self._grid)
-
 
     def __validate_coords(self, x, y):
         orig_x = x
