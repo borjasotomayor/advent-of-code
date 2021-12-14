@@ -5,7 +5,11 @@ https://adventofcode.com/2021/day/14
 1st star: 00:11:34	
 2nd star: 00:42:04
 
-Ok, not going to lie: for Part 2 I basically took the approach of
+For Part 1, I took the approach of generating the string, knowing
+full well that it would come back to haunt me in Part 2 and, sure
+enough, had to rewrite all my code for Part 2.
+
+Also, not going to lie: for Part 2 I basically took the approach of
 "let's throw stuff at the wall and see what sticks". I knew I
 couldn't generate all the strings, and instead needed to count up
 *something* and figured I'd start with the pairs to see if that would
