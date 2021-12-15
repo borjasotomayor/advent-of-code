@@ -96,6 +96,10 @@ class Grid:
                   (-1,  0),          (+1, 0),
                   (-1, +1), (0, +1), (+1,+1)]
 
+    CARDINAL_DIRS = [          (0, -1),
+                     (-1,  0),          (+1, 0),
+                               (0, +1)         ]                  
+
     def __init__(self, grid, infinite_x=False, infinite_y=False):
         self.infinite_x = infinite_x
         self.infinite_y = infinite_y
