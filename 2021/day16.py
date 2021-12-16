@@ -12,7 +12,8 @@ to reimplement it in C.
 
 The code below is effectively the same code I wrote to obtain the solution,
 except for some cleaning up. I invested in writing a Packet class in Part 1, 
-and that paid off handsomely in Part 2.
+and that paid off handsomely in Part 2 (all I had to do was add an eval()
+method to the Packet class, and everything fell into place beautifully)
 """
 
 import util
