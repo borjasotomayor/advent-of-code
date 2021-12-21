@@ -83,16 +83,9 @@ def coords_transform(coords, transform):
     """
     x, y, z = coords
     sx, sy, sz, m = transform
-    tx = sx*x
-    ty = sy*y
-    tz = sz*z
+    tpl = (sx*x, sy*y, sz*z)
 
-    nrp = [None,None,None]
-    nrp[m[0]] = tx
-    nrp[m[1]] = ty
-    nrp[m[2]] = tz
-
-    return tuple(nrp)
+    return (tpl[m[0]], tpl[m[1]], tpl[m[2]])
 
 
 class Beacon:
