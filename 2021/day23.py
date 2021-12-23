@@ -12,20 +12,17 @@ started reading the movement rules more carefully, I realized
 it was basically a variation on the Tower of Hanoi puzzle, so
 I implemented it as such.
 
-This code is still pretty slow (it takes about 30 seconds to
+This code is still a bit slow (it takes about 9 seconds to
 find the solution for both the sample and actual input on both
 tasks). I used a couple of optimizations (branch and bound, memoization,
 greedily exploring low-cost moves first, etc.) but I suspect the
-game tree could be cut down even further.
+game tree could be cut down even further. Additionally, instead
+of recursively exploring the game tree, this can probably be
+re-written to use Dijkstra's or A*.
 """
 
 import util
-import math
-import sys
-import re
 import operator
-
-from util import log
 
 
 class Peg:
@@ -37,7 +34,7 @@ class Peg:
         """
         A peg has a capacity (the maximum number of rings it can hold),
         and can either be a target peg (in which case it is associated
-        with a specific letter) or an auxiliary ring.
+        with a specific letter) or an auxiliary peg.
 
         We can optionally provide initial values for the peg.
         """
@@ -135,15 +132,16 @@ class Peg:
 
     def __str__(self):
         """
-        Dunder method for 
+        Dunder method for debugging
         """
         return "-- " + " - ".join(self.rings)
 
 
-
 class GeneralHanoi:
     """
-    Class for implementing a general Towers of Hanoi game
+    Class for implementing a general Towers of Hanoi game, subject to
+    a few additional constraints (e.g., not being able to move if
+    the "hallway" is blocked)
     """
 
     ENERGY = {"A": 1,
@@ -196,7 +194,7 @@ class GeneralHanoi:
         
     def possible_moves(self, peg_num):
         """
-        Return all the possible froms from a peg.
+        Return all the possible moves froms from a peg.
 
         For each move, returns a (src, dst, energy, target) tuple,
         where target is True if the move would result in a ring
@@ -272,52 +270,48 @@ class GeneralHanoi:
         h = ""
         for peg in self.pegs:
             h += "".join(peg.rings)
-            h += "." * (peg.capacity - peg.size)
+            h += "." * (peg.capacity - len(peg.rings))
         return h
 
-    def solve(self, total_energy=0, max_energy=None, memo=None):
+    def solve(self, max_energy=None, memo=None):
         """
         Find the solution with the lowest total energy.
 
         Parameters:
-        - total_energy: the energy we have consumed so far
         - max_energy: the maximum energy we're willing to consume
-          (i.e., the energy of the best solution we've found so
-           far; no point exploring solutions that would have
-           higher energy)
+          (this is based off the best solution we've found
+          so far; no point exploring solutions that would have
+          higher energy)
         - memo: A dictionary for memoization
 
-        Returns (solved, energy), where solved is True if a
-        solution is found. If solution is not found, energy
-        is None.
+        Returns the minimum energy required to reach the
+        final state of the game.
         """
 
         if memo is None:
             memo = {}
 
+        # Computing the hash is expensive(-ish), so let's
+        # do it only once.
+        hash = self.hash
+
         # Check if we can return a result from the memoization
         # dictionary.
-        if self.hash in memo:
-            if memo[self.hash] is None:
-                return False, None
-            elif total_energy in memo[self.hash]:
-                rv = memo[self.hash][total_energy]
-                if rv is None:
-                    return False, None
-                else:
-                    return True, rv
+        if hash in memo:
+            return memo[hash]
 
-        # Base case: The game is done, so we return
+        # Base case: The game is done, and no energy is required
+        # to reach the final state.
         if self.done:
-            return True, total_energy
+            return 0
 
         # Compute the next possible moves (potentially extracting
         # them from the moves cache)
-        if self.hash in self.moves_cache:
-            all_moves = self.moves_cache[self.hash]
+        if hash in self.moves_cache:
+            all_moves = self.moves_cache[hash]
         else:
             all_moves = []
-            for i, peg in enumerate(self.pegs):
+            for i, _ in enumerate(self.pegs):
                 all_moves += self.possible_moves(i)
 
             # Greedy optimization: start by checking the moves that
@@ -325,12 +319,12 @@ class GeneralHanoi:
             # in ascending cost
             all_moves.sort(key=operator.itemgetter(2))
             all_moves.sort(key=operator.itemgetter(3), reverse=True)
-            self.moves_cache[self.hash] = all_moves
+            self.moves_cache[hash] = all_moves
 
         if len(all_moves) == 0:
             # Base case: No moves, we're stuck
-            memo[self.hash] = None
-            return False, None
+            memo[hash] = None
+            return None
         else:
             # Recursive case: we explore all possible next moves. Once we
             # find a solution, we start skipping any path that would lead
@@ -338,35 +332,35 @@ class GeneralHanoi:
             
             best_energy = None
             for src, dst, energy, _ in all_moves:
-                # If this move would have a higher cost than the best solution
-                # so far, we skip it
-                if max_energy is not None and total_energy + energy > max_energy:
+                # If this move exhausts the energy we have available
+                # (i.e., if it would have a higher cost than the best solution
+                # so far), we skip it
+                if max_energy is not None and max_energy - energy < 0:
                     continue
 
                 # Make the move, and make the recursive call
                 self.move(src, dst)
-                solved, next_energy = self.solve(total_energy + energy, max_energy, memo)
+                new_max_energy = max_energy - energy if max_energy is not None else None
+                next_energy = self.solve(new_max_energy, memo)
 
-                if solved and (best_energy is None or next_energy < best_energy):
-                    # If we found a solution, and it's better than what we've
-                    # seen so far in this loop, update best_energy
-                    best_energy = next_energy
+                if next_energy is not None:
+                    total_energy = energy + next_energy
+                    if best_energy is None or total_energy < best_energy:
+                        # If we found a solution, and it's better than what we've
+                        # seen so far in this loop, update best_energy
+                        best_energy = total_energy
 
-                if solved and (max_energy is None or next_energy < max_energy):
-                    # If we found a solution, and it's better than anything
-                    # we've seen so far, update max_energy
-                    max_energy = next_energy
+                    if max_energy is None or total_energy < max_energy:
+                        # If we found a solution, and it's better than anything
+                        # we've seen so far, update max_energy
+                        max_energy = total_energy
 
                 # Undo the move
                 self.move(dst, src)
 
-            # If we found a solution, return it (and update the memoization dictionary)
-            if best_energy is not None:
-                memo.setdefault(self.hash, {})[total_energy] = best_energy
-                return True, best_energy
-            else:
-                memo.setdefault(self.hash, {})[total_energy] = None
-                return False, None
+            # Return solution (if any) and update the memoization dictionary
+            memo[hash] = best_energy
+            return best_energy
 
     def __str__(self):
         return "\n".join(f"{i} {p}" for i, p in enumerate(self.pegs))
