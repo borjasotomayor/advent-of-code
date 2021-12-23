@@ -12,13 +12,19 @@ started reading the movement rules more carefully, I realized
 it was basically a variation on the Tower of Hanoi puzzle, so
 I implemented it as such.
 
+The approach I took was basically a DFS search with a number
+of optimizations (branch and bound, memoization,
+greedily exploring low-cost moves first, etc.). My solution
+to Part 1 was general enough that solving Part 2 only required
+some minor modifications (mostly to generalize the number
+of rings that fit in a peg).
+
 This code is still a bit slow (it takes about 9 seconds to
 find the solution for both the sample and actual input on both
-tasks). I used a couple of optimizations (branch and bound, memoization,
-greedily exploring low-cost moves first, etc.) but I suspect the
-game tree could be cut down even further. Additionally, instead
-of recursively exploring the game tree, this can probably be
-re-written to use Dijkstra's or A*.
+tasks). Despite optimizing the code as much as I could, I suspect
+the game tree could be cut down even further. Additionally, 
+instead of recursively exploring the game tree, this can probably 
+be re-written to use Dijkstra's or A*.
 """
 
 import util
@@ -376,7 +382,7 @@ def task1(input):
 
 def task2(input):
     """
-    Task 1: Solve with pegs of size 4
+    Task 2: Solve with pegs of size 4
     """
     hanoi = GeneralHanoi(input, peg_size=4)
     return hanoi.solve()
