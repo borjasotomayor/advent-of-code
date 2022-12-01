@@ -49,25 +49,32 @@ def call_and_print(fn, *args):
 # FILE I/O
 #
 
-def read_strs(filename, sep=None):
+def read_strs(filename, sep=None, sep2=None):
     """
     Read strings from a file, separated by whitespace or by the
     specified separator.
     """
     with open(filename) as f:
         txt = f.read().strip()
-        strs = txt.split(sep=sep)    
+        strs = txt.split(sep=sep)  
+
+    if sep2 is not None:
+        strs = [s.split(sep=sep2) for s in strs]
 
     return strs
 
 
-def read_ints(filename, sep=None):
+def read_ints(filename, sep=None, sep2=None):
     """
     Read integers from a file, separated by whitespace or by the
     specified separator.
     """
-    strs = read_strs(filename, sep)
-    return [int(x) for x in strs]
+    strs = read_strs(filename, sep, sep2)
+    
+    if sep2 is not None:
+        return [[int(x) for x in s] for s in strs]
+    else:
+        return [int(x) for x in strs]
 
 
 def iter_parse(strings, fmt):
