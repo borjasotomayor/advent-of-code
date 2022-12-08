@@ -34,8 +34,8 @@ def is_visible(grid, x, y):
         all_shorter = True
 
         # Keep moving in the current direction (dx, dy)
-        # until we reach an invalid grid value (because)
-        # we went past the edge
+        # until we reach an invalid grid value (because
+        # we went past the edge)
         ix, iy = x + dx, y + dy
         while grid.valid(ix, iy):
             height2 = grid.get(ix, iy)
@@ -62,8 +62,8 @@ def viewing_distance(grid, x, y):
         distance = 0
 
         # Keep moving in the current direction (dx, dy)
-        # until we reach an invalid grid value (because)
-        # we went past the edge
+        # until we reach an invalid grid value (because
+        # we went past the edge)
         ix, iy = x + dx, y + dy
         while grid.valid(ix, iy):
             distance += 1
