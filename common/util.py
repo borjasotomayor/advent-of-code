@@ -154,6 +154,12 @@ class Grid:
         except IndexError:
             return default
 
+    def valid(self, x, y):
+        try:
+            self.__validate_coords(x, y)
+            return True
+        except IndexError:
+            return False
 
     def set(self, x, y, value):
         x, y = self.__validate_coords(x, y)
