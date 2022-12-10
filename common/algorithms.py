@@ -86,9 +86,6 @@ def grid_dfs(grid, x, y, visit_func, iswall_func):
     """
 
     def grid_dfs_r(grid, x, y, visit_func, iswall_func, visited):
-        if not grid.valid(x, y):
-            return
-
         if iswall_func(grid, x, y):
             return
 
@@ -126,9 +123,8 @@ def test_grid_dfs():
         grid.set(x, y, "x")
 
     def is_wall(grid, x, y):
-        v = grid.get(x, y)
+        v = grid.getdefault(x, y, "#")
         return v == "#"
-
 
     print(grid)
 
@@ -164,8 +160,12 @@ def grid_bfs(grid, x, y, iswall_func, istarget_func):
                    coordinate of a grid is a "wall" (and should 
                    not be processed). Must take (grid, x, y)
                    as parameters.
+    - istarget_func: A function that determines whether
+                     a given coordinate of a grid is the target
+                     of our search. Must take (grid, x, y)
+                     as parameters.
 
-    Returns: nothing
+    Returns: Path from starting coordinates to nearest target
     """
 
     # Queue
