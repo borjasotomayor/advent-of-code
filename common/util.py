@@ -166,11 +166,8 @@ class Grid:
 
         self._grid[y][x] = value
 
-
     @classmethod
-    def from_file(cls, filename, cast=None):
-        lines = read_strs(filename, sep="\n")
-
+    def _from_lines(cls, lines, cast=None):
         # We convert each line to a list, in case we
         # need to modify the contents of the grid
         grid = [list(line) for line in lines]
@@ -180,6 +177,17 @@ class Grid:
 
         return cls(grid)
 
+    @classmethod
+    def from_file(cls, filename, cast=None):
+        lines = read_strs(filename, sep="\n")
+
+        return cls._from_lines(lines, cast)
+
+    @classmethod
+    def from_string(cls, grid_str, cast=None):
+        lines = grid_str.strip().split(sep="\n")
+
+        return cls._from_lines(lines, cast)
 
     @classmethod
     def empty(cls, max_x, max_y, char=" "):
