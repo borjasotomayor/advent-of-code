@@ -4,6 +4,7 @@ come in handy in some Advent of Code problems.
 
 - Depth-First Search on graphs
 - Depth-First Search on grids (using my util.Grid class)
+- Breadth-First Search on grids
 - Dijkstra's shortest path algorithm
 
 Each algorithm includes a test_algorithm function with a simple
@@ -76,7 +77,7 @@ def grid_dfs(grid, x, y, visit_func, iswall_func):
     - visit_func: A function that will be called on each position
                   of the grid. Function must take (grid, x, y)
                   as parameters.
-    - iswall_func: A function that determinesw hether a given
+    - iswall_func: A function that determines whether a given
                    coordinate of a grid is a "wall" (and should 
                    not be processed). Must take (grid, x, y)
                    as parameters.
@@ -137,6 +138,115 @@ def test_grid_dfs():
     print(grid)
 
     grid_dfs(grid, 1, 1, visit, is_wall)
+
+    print()
+    print(grid)
+
+###############################################################################
+# 
+#  GRID BREADTH-FIRST SEARCH
+# 
+###############################################################################       
+
+from util import Grid
+
+def grid_bfs(grid, x, y, iswall_func, istarget_func):
+    """
+    Breadth-first search (BFS) on a grid.
+
+    Intended to find the shortest path from a starting point
+    to some target location
+
+    Parameters:
+    - grid: The grid to do DFS on ()
+    - x, y: The coordinates to start DFS on
+    - iswall_func: A function that determines whether a given
+                   coordinate of a grid is a "wall" (and should 
+                   not be processed). Must take (grid, x, y)
+                   as parameters.
+
+    Returns: nothing
+    """
+
+    # Queue
+    q = []
+    q.append((x,y))
+
+    # Set of visited locations
+    visited = {(x,y)}
+
+    # Distance and previous-location dictionaries
+    dist = {}
+    dist[(x,y)] = 0
+    prev = {}
+    prev[(x,y)] = None
+    target = None
+
+    # Ye olde BFS loop
+    while len(q) > 0:
+        cur = q.pop(0)
+
+        cx, cy = cur
+
+        # Check if we've reached the target
+        if istarget_func(grid, cx, cy):
+            target = cur
+            break
+
+        # Check the neighbors
+        for dx, dy in Grid.CARDINAL_DIRS:
+            neigh = (cx+dx, cy+dy)
+            if not iswall_func(grid, neigh[0], neigh[1]) and neigh not in visited:
+                visited.add(neigh)
+                prev[neigh] = cur
+                dist[neigh] = dist[cur] + 1
+                q.append(neigh)
+
+    # Generate path
+    path = [target]
+    pos = target
+    while pos != (x,y):
+        pos = prev[pos]
+        path.append(pos)
+    path.reverse()
+
+    return path
+
+def test_grid_bfs():
+
+    # We're going to test our Grid BFS by searching for the
+    # shortest path in a maze
+
+    grid_str = \
+"""
+################
+...###.........#
+##.###.###.##.##
+##.###.###.##.##
+##......#..#...X
+##.###.######.##
+##...#........##
+################
+"""
+
+    grid = Grid.from_string(grid_str)
+
+    def is_wall(grid, x, y):
+        v = grid.getdefault(x, y, "#")
+        return v == "#"
+
+    def is_target(grid, x, y):
+        v = grid.get(x, y)
+        return v == "X"
+
+
+    print(grid)
+
+    path = grid_bfs(grid, 0, 1, is_wall, is_target)
+
+    # Let's update the grid to highlight the path
+    for x,y in path:
+        grid.set(x, y, "█")
 
     print()
     print(grid)
@@ -226,5 +336,7 @@ if __name__ == "__main__":
     test_graph_dfs()
     print()
     test_grid_dfs()
+    print()
+    test_grid_bfs()
     print()
     test_dijkstra()
