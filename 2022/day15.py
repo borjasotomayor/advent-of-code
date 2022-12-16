@@ -16,10 +16,16 @@ a gap (the distress beacon)
 That said, my solution still takes ~20 seconds to run
 on the actual input, so I suspect there's a much
 more efficient solution to this.
+
+UPDATE (12/15): I didn't come up with a more clever solution,
+but did add a parallelized version of my Task 2 solution,
+which brings the running time down to 2-3 seconds.
 """
 
 import util
 import operator
+from multiprocessing import Pool
+from functools import partial
 
 from util import log
 
@@ -151,7 +157,6 @@ def find_nobeacon_positions(sensors, beacons, y):
 
     return n
 
-
 def find_tuning_frequency(sensors, bound):
     """
     Part 2: Find the distress beacon and return its tuning frequency
@@ -170,6 +175,46 @@ def find_tuning_frequency(sensors, bound):
 
         return tx*4000000 + y
 
+#
+# Parallelized version of Task 2
+#
+# Checking each row is embarassingly parallel, so it
+# can be handed off to a separate process.
+#
+
+def wrapper(sensors, bound, y):
+    """
+    Wrapper function for calling find_sensor_ranges, so we can
+    return None if there is no gap in the sensor ranges,
+    and the position of the gap if one exists. This makes
+    it easier to detect when we should bail out of the
+    parallel row checking.
+    """
+    sensor_ranges = find_sensor_ranges(sensors, y, bound)
+    if len(sensor_ranges) == 1:
+        return None
+    else:
+        return sensor_ranges[0][1]+1, y
+
+def parallel_find_tuning_frequency(sensors, bound):
+    """
+    Parallelized version of find_tuning_frequency
+    """
+
+    # imap_unordered expects a function with a single parameter,
+    # so we need to create a partial that sets the sensors and bound
+    # parameters (only leaving the y parameter)
+    p = partial(wrapper, sensors, bound)
+
+    # We use a pool of 8 processes and a chunk size of 10,000 (i.e., work
+    # is doled out to the worker processes in chunks of 10,000 rows)
+    with Pool(processes=8) as pool:
+        for result in pool.imap_unordered(p, range(0, bound), chunksize=10000):
+            if result is not None:
+                pool.terminate()
+                tx, ty = result
+                return tx*4000000 + ty
+
 
 if __name__ == "__main__":
     util.set_debug(False)
@@ -187,3 +232,7 @@ if __name__ == "__main__":
     print("\nTASK 2")
     util.call_and_print(find_tuning_frequency, sample_sensors, 20)
     util.call_and_print(find_tuning_frequency, sensors, 4000000)
+
+    print("\nTASK 2 (Parallel)")
+    util.call_and_print(parallel_find_tuning_frequency, sample_sensors, 20)
+    util.call_and_print(parallel_find_tuning_frequency, sensors, 4000000)
