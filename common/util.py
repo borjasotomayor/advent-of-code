@@ -221,6 +221,15 @@ class Direction:
     def LEFT(cls):
         return cls(-1,0)
 
+    def __eq__(self, other):
+        return self._p == other._p
+
+    def __hash__(self):
+        return hash((self._p.x, self._p.y))
+
+    def __copy__(self):
+        return Direction(self._p.x, self._p.y)
+
     NORTH = UP
     SOUTH = DOWN
     EAST = RIGHT
