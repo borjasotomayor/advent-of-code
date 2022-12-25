@@ -12,6 +12,11 @@ an approach that was way more complicated than it
 neded to be (and, after staring at the
 decimal-to-snafu table long enough, finally realized
 the straightforward way to do the conversion)
+
+UPDATE (12/25): I added the implementation of my
+original approach, which was originally not working
+because I had mixed up roots with logs *facepalm*
+(still glad I wasn't that far off target)
 """
 
 import util
@@ -51,6 +56,28 @@ def decimal2snafu(dec):
     return "".join(reversed(snafu))
 
 
+def decimal2snafu_alt(dec):
+    """
+    Alternate (more convoluted) way of computing
+    the SNAFU number
+    """
+    DIGITS = {"2": 2, "1": 1, "0": 0, "-": -1, "=": -2}
+    max_power = int(math.log(dec, 5))
+
+    rem = dec
+    snafu = ""
+    for i in range(max_power, -1, -1):
+        for digit, value in DIGITS.items():
+            ub = snafu2decimal(digit + "2"*i)
+            lb = snafu2decimal(digit + "="*i)
+            if lb <= rem <= ub:
+                snafu += digit
+                rem -= (5**i) * value
+                break
+            
+    return snafu
+
+
 def task1(input):
     """
     Compute the decimal sum of the snafu numbers,
@@ -59,7 +86,7 @@ def task1(input):
     s = 0
     for snafu in input:
         s += snafu2decimal(snafu)
-    
+
     return decimal2snafu(s)
 
 
