@@ -1,1 +1,5 @@
 __pycache__
+
+# Puzzle inputs (excluded at the request of AoC maintainers)
+# Sample inputs in input/sample/ are still committed
+*/input/*.in
