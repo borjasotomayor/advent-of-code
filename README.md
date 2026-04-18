@@ -42,7 +42,7 @@ This repository contains sample input data, but you will need to download the ac
 1. **Manual download**: If you are only testing an individual problem, you can log into [Advent of Code](https://adventofcode.com/) and download the input data and save it to `YYYY/input/DD.in` (e.g., if you're testing 2025 Day 3 you would save the input to `2025/input/03.in`)
 2. **Automated download**: There is a `download_inputs.py` script that will download all the input files needed for the solutions in the repo. To be able to run it, you will first need to export your AoC session cookie like this:
 
-    export AOC_SESSION=<token>
+       export AOC_SESSION=<token>
 
   If you are not sure how to get your session cookie, see [this page](https://github.com/wimglenn/advent-of-code-wim/issues/1)
 
