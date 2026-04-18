@@ -1,3 +1,4 @@
+advent-of-code-data>=2.0.1
 IPython>=8.18.1
 mypy>=1.7.1
 parse>=1.20.0

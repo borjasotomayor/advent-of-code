@@ -37,6 +37,15 @@ To run the solutions, you will first need to create a virtual environment and in
     source venv/bin/activate
     pip3 install -r requirements
 
-Then, run any solution with:
+This repository contains sample input data, but you will need to download the actual input data if you want to run the solutions. You have two options:
+
+1. **Manual download**: If you are only testing an individual problem, you can log into [Advent of Code](https://adventofcode.com/) and download the input data and save it to `YYYY/input/DD.in` (e.g., if you're testing 2025 Day 3 you would save the input to `2025/input/03.in`)
+2. **Automated download**: There is a `download_inputs.py` script that will download all the input files needed for the solutions in the repo. To be able to run it, you will first need to export your AoC session cookie like this:
+
+    export AOC_SESSION=<token>
+
+  If you are not sure how to get your session cookie, see [this page](https://github.com/wimglenn/advent-of-code-wim/issues/1)
+
+Once you've activated the virtual environment, and have downloaded the necessary input data, you can run individual solutions from each year's directory like this:  
 
     python3 dayXX.py
