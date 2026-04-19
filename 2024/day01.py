@@ -52,10 +52,13 @@ if __name__ == "__main__":
     sample = util.read_ints("input/sample/01.in")
     input = util.read_ints("input/01.in")
 
+    lst1s, lst2s = read_lists(sample)
+    lst1, lst2 = read_lists(input)
+
     print("TASK 1")
-    util.call_and_print(task1, sample)
-    util.call_and_print(task1, input)
+    util.call_and_print(add_differences, lst1s, lst2s)
+    util.call_and_print(add_differences, lst1, lst2)
 
     print("\nTASK 2")
-    util.call_and_print(task2, sample)
-    util.call_and_print(task2, input)
+    util.call_and_print(count_occurrences, lst1s, lst2s)
+    util.call_and_print(count_occurrences, lst1, lst2)
