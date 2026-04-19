@@ -34,7 +34,7 @@ def count_occurrences(l1: list[int], l2: list[int]) -> int:
     """
 
     # Count up numbers in the 2nd list
-    counts = {}
+    counts: dict[int, int] = {}
     for n in l2:
         counts[n] = counts.setdefault(n, 0) + 1
 

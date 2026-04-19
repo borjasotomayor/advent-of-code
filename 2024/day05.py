@@ -44,7 +44,7 @@ def build_deps_dict(deps: list[str]) -> dict[int, set[int]]:
     return deps_dict
 
 
-def is_correct_update(pages: list[int], deps_dict: dict[int, set[int]]):
+def is_correct_update(pages: list[int], deps_dict: dict[int, set[int]]) -> tuple[bool, int | None]:
     """
     Checks if an update is correct. If not, it returns False and
     the index of the offending page (which will come in handy
@@ -90,6 +90,7 @@ def fix_update(pages: list[int], deps_dict: dict[int, set[int]]) -> list[int]:
     assert not correct
 
     while not correct:
+        assert idx is not None
         # Swap the offending page with the previous page
         update[idx-1], update[idx] = update[idx], update[idx-1]
         correct, idx = is_correct_update(update, deps_dict)

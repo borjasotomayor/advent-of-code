@@ -16,7 +16,7 @@ from grid import Grid
 from util import log
 
 
-def count_xmas(grid):
+def count_xmas(grid: Grid) -> int:
     """
     Count occurrences of XMAS in the grid
     """
@@ -31,7 +31,7 @@ def count_xmas(grid):
     return total
 
 
-def count_masx(grid):
+def count_masx(grid: Grid) -> int:
     """
     Count occurrences of MAS (in an X) in the grid
     """
