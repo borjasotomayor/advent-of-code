@@ -69,6 +69,6 @@ if __name__ == "__main__":
     util.call_and_print(count_safe_reports, sample, False)
     util.call_and_print(count_safe_reports, input, False)
 
-    #print("\nTASK 2")
+    print("\nTASK 2")
     util.call_and_print(count_safe_reports, sample, True)
     util.call_and_print(count_safe_reports, input, True)
