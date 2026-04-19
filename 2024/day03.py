@@ -40,7 +40,7 @@ def add_multiplications(program: str, conditionals: bool) -> int:
         op, a, b = m.groups()
         if conditionals and op == "do()":
             mul_enabled = True
-        if conditionals and op == "don't()":
+        elif conditionals and op == "don't()":
             mul_enabled = False  
         elif op.startswith("mul") and mul_enabled:
             total += int(a) * int(b)
