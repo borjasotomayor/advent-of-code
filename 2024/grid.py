@@ -1,1 +1,1 @@
-../common/grid.py
+from aoc.grid import *

@@ -1,0 +1,20 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "aoc-borja"
+version = "0.1"
+description = "Borja Sotomayor's solutions for Advent of Code"
+dependencies = [
+    "advent-of-code-data>=2.0.1",
+    "IPython>=8.18.1",
+    "mypy>=1.7.1",
+    "parse>=1.20.0",
+    "shapely>=2.0.2",
+    "sympy>=1.12",
+    "types-shapely>=2.0.0",
+]
+
+[tool.setuptools.packages.find]
+include = ["aoc*"]

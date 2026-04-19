@@ -1,1 +1,1 @@
-../common/util.py
+from aoc.util import *
