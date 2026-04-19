@@ -35,7 +35,7 @@ To run the solutions, you will first need to create a virtual environment and in
 
     python3 -m venv venv
     source venv/bin/activate
-    pip3 install -r requirements
+    pip3 install -e .
 
 This repository contains sample input data, but you will need to download the actual input data if you want to run the solutions. You have two options:
 
